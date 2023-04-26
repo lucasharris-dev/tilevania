@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 603041621}
   - component: {fileID: 603041620}
   - component: {fileID: 603041619}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: platforms tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3100,6 +3100,10 @@ PrefabInstance:
     - target: {fileID: 1602517232, guid: 978f09985d601144082b9a926e78b4cb, type: 3}
       propertyPath: m_GravityScale
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602517232, guid: 978f09985d601144082b9a926e78b4cb, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2655604598293310344, guid: 978f09985d601144082b9a926e78b4cb, type: 3}
       propertyPath: m_RootOrder

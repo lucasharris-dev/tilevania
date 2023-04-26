@@ -8,14 +8,16 @@ public class playermovement : MonoBehaviour
     [SerializeField] float playerSpeed = 10f;
     [SerializeField] float jumpHeight = 25f;
     Vector2 moveInput;
-    Rigidbody2D myRigidBody;
+    Rigidbody2D myRigidBody; // component reference
     Animator myAnimator;
+    CapsuleCollider2D myCapsuleCollider;
 
     // Start is called before the first frame update
     void Start()
     {
-        myRigidBody = GetComponent<Rigidbody2D>();
+        myRigidBody = GetComponent<Rigidbody2D>(); // this has to be done to all component references, or they will be null
         myAnimator = GetComponent<Animator>();
+        myCapsuleCollider = GetComponent<CapsuleCollider2D>();
     }
 
     // Update is called once per frame
@@ -28,14 +30,14 @@ public class playermovement : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
-        Debug.Log(moveInput);
     }
 
     void OnJump(InputValue value)
     {
-        if (value.isPressed)
+        if (myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("ground")) && value.isPressed)
         {
             myRigidBody.velocity = new Vector2(0f, jumpHeight);
+            Debug.Log("jump");
         }
     }
 
