@@ -7,10 +7,12 @@ public class playermovement : MonoBehaviour
 {
     [SerializeField] float playerSpeed = 10f;
     [SerializeField] float jumpHeight = 25f;
+    [SerializeField] float climbSpeed = 5f;
     Vector2 moveInput;
     Rigidbody2D myRigidBody; // component reference
     Animator myAnimator;
     CapsuleCollider2D myCapsuleCollider;
+    float startingGravityScale;
 
     // Start is called before the first frame update
     void Start()
@@ -18,13 +20,19 @@ public class playermovement : MonoBehaviour
         myRigidBody = GetComponent<Rigidbody2D>(); // this has to be done to all component references, or they will be null
         myAnimator = GetComponent<Animator>();
         myCapsuleCollider = GetComponent<CapsuleCollider2D>();
+        startingGravityScale = myRigidBody.gravityScale;
     }
 
     // Update is called once per frame
     void Update()
     {
         Run();
-        FlipSprite();
+        Climb();
+
+        if (moveInput.x != 0) // had to do this to keep the sprite from resetting
+        {
+            FlipSprite();
+        }
     }
 
     void OnMove(InputValue value)
@@ -36,8 +44,7 @@ public class playermovement : MonoBehaviour
     {
         if (myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("ground")) && value.isPressed)
         {
-            myRigidBody.velocity = new Vector2(0f, jumpHeight);
-            Debug.Log("jump");
+            myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpHeight);
         }
     }
 
@@ -46,6 +53,17 @@ public class playermovement : MonoBehaviour
         Vector2 playerVelocity = new Vector2 (moveInput.x * playerSpeed, myRigidBody.velocity.y);
         myRigidBody.velocity = playerVelocity;
         myAnimator.SetBool("isRunning", PlayerHasHorizontalSpeed());
+    }
+
+    void Climb()
+    {
+        if (myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("climbing")))
+        {
+            myRigidBody.gravityScale = 0f;
+            myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, moveInput.y * climbSpeed);
+            return;
+        }
+        myRigidBody.gravityScale = startingGravityScale;
     }
 
     void FlipSprite()
