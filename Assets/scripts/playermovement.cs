@@ -8,12 +8,15 @@ public class playermovement : MonoBehaviour
     [SerializeField] float playerSpeed = 7.5f;
     [SerializeField] float jumpHeight = 25f;
     [SerializeField] float climbSpeed = 3f;
+    [SerializeField] Vector2 deathKick = new Vector2(20f, 20f);
     Vector2 moveInput;
     Rigidbody2D myRigidBody; // component reference
     Animator myAnimator;
     CapsuleCollider2D myBodyCollider;
     BoxCollider2D myFeetCollider;
+    SpriteRenderer mySpriteRenderer;
     float startingGravityScale;
+    bool isAlive;
 
     // Start is called before the first frame update
     void Start()
@@ -22,19 +25,24 @@ public class playermovement : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         myBodyCollider = GetComponent<CapsuleCollider2D>();
         myFeetCollider = GetComponent<BoxCollider2D>();
+        mySpriteRenderer = GetComponent<SpriteRenderer>();
         startingGravityScale = myRigidBody.gravityScale;
+        isAlive = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!isAlive)
+        {
+            return;
+        }
+
         Run();
         Climb();
-
-        if (moveInput.x != 0) // had to do this to keep the sprite from resetting
-        {
-            FlipSprite();
-        }
+        FlipSprite();
+        Die();
+        
     }
 
     void OnMove(InputValue value)
@@ -44,10 +52,12 @@ public class playermovement : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("ground")) && value.isPressed)
+        if (!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("ground")) && value.isPressed)
         {
-            myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpHeight);
+            return;
         }
+        
+        myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpHeight);
     }
 
     void Run()
@@ -63,18 +73,23 @@ public class playermovement : MonoBehaviour
         bool isClimbing = moveInput.y != 0 && canClimb;
         myAnimator.SetBool("isClimbing", PlayerHasVerticalSpeed() && isClimbing);
 
-        if (canClimb)
+        if (!canClimb)
         {
-            myRigidBody.gravityScale = 0f;
-            myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, moveInput.y * climbSpeed);
+            myRigidBody.gravityScale = startingGravityScale;
             return;
         }
 
-        myRigidBody.gravityScale = startingGravityScale;
+        myRigidBody.gravityScale = 0f;
+        myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, moveInput.y * climbSpeed);
     }
 
-    void FlipSprite()
+    void FlipSprite() // finish changing to !expression
     {
+        if (!PlayerHasHorizontalSpeed()) // had to do this to keep the sprite from resetting
+        {
+            return;
+        }
+
         transform.localScale = new Vector2(Mathf.Sign(myRigidBody.velocity.x), 1f); // Sign returns 1 if positive, -1 if negative
     }
 
@@ -86,5 +101,17 @@ public class playermovement : MonoBehaviour
     bool PlayerHasVerticalSpeed()
     {
         return Mathf.Abs(myRigidBody.velocity.y) >= Mathf.Epsilon;
+    }
+
+    void Die()
+    {
+        if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("enemies", "hazards")))
+        {
+            isAlive = false;
+            myAnimator.SetTrigger("dying");
+            mySpriteRenderer.color = Color.red;
+            myRigidBody.velocity = deathKick;
+        }
+        
     }
 }
