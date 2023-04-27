@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 74a6af5fd301f974ba17523845ad9df8
+guid: fa590fbc92c491c449712c63c85d2be4
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -101,39 +101,21 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
     outline: []
     physicsShape:
-    - - {x: -11, y: -16}
-      - {x: -11, y: 16}
-      - {x: 11, y: 16}
-      - {x: 11, y: -16}
+    - - {x: 6.0121956, y: -2}
+      - {x: 6, y: -16}
+      - {x: -6, y: -16}
+      - {x: -6.135355, y: -2}
+      - {x: -15, y: -2}
+      - {x: -15, y: 4.8258076}
+      - {x: -12, y: 13}
+      - {x: 13, y: 13}
+      - {x: 15, y: 4.825815}
+      - {x: 15, y: -2}
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
     internalID: 1537655665

@@ -5,13 +5,14 @@ using UnityEngine.InputSystem;
 
 public class playermovement : MonoBehaviour
 {
-    [SerializeField] float playerSpeed = 10f;
+    [SerializeField] float playerSpeed = 7.5f;
     [SerializeField] float jumpHeight = 25f;
-    [SerializeField] float climbSpeed = 5f;
+    [SerializeField] float climbSpeed = 3f;
     Vector2 moveInput;
     Rigidbody2D myRigidBody; // component reference
     Animator myAnimator;
-    CapsuleCollider2D myCapsuleCollider;
+    CapsuleCollider2D myBodyCollider;
+    BoxCollider2D myFeetCollider;
     float startingGravityScale;
 
     // Start is called before the first frame update
@@ -19,7 +20,8 @@ public class playermovement : MonoBehaviour
     {
         myRigidBody = GetComponent<Rigidbody2D>(); // this has to be done to all component references, or they will be null
         myAnimator = GetComponent<Animator>();
-        myCapsuleCollider = GetComponent<CapsuleCollider2D>();
+        myBodyCollider = GetComponent<CapsuleCollider2D>();
+        myFeetCollider = GetComponent<BoxCollider2D>();
         startingGravityScale = myRigidBody.gravityScale;
     }
 
@@ -42,7 +44,7 @@ public class playermovement : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        if (myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("ground")) && value.isPressed)
+        if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("ground")) && value.isPressed)
         {
             myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpHeight);
         }
@@ -57,12 +59,17 @@ public class playermovement : MonoBehaviour
 
     void Climb()
     {
-        if (myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("climbing")))
+        bool canClimb = myBodyCollider.IsTouchingLayers(LayerMask.GetMask("climbing"));
+        bool isClimbing = moveInput.y != 0 && canClimb;
+        myAnimator.SetBool("isClimbing", PlayerHasVerticalSpeed() && isClimbing);
+
+        if (canClimb)
         {
             myRigidBody.gravityScale = 0f;
             myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, moveInput.y * climbSpeed);
             return;
         }
+
         myRigidBody.gravityScale = startingGravityScale;
     }
 
@@ -74,5 +81,10 @@ public class playermovement : MonoBehaviour
     bool PlayerHasHorizontalSpeed()
     {
         return Mathf.Abs(myRigidBody.velocity.x) >= Mathf.Epsilon; //Epsilon is the smallest non-zero float value
+    }
+
+    bool PlayerHasVerticalSpeed()
+    {
+        return Mathf.Abs(myRigidBody.velocity.y) >= Mathf.Epsilon;
     }
 }
