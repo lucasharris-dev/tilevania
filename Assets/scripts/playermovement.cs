@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class playermovement : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class playermovement : MonoBehaviour
     [SerializeField] Vector2 deathKick = new Vector2(20f, 20f);
     [SerializeField] GameObject bullet;
     [SerializeField] Transform gun;
+    [SerializeField] float restartTime = 1f;
 
     float startingGravityScale;
     bool isAlive;
@@ -123,6 +125,13 @@ public class playermovement : MonoBehaviour
         return Mathf.Abs(myRigidBody.velocity.y) >= Mathf.Epsilon;
     }
 
+    IEnumerator ResetGame()
+    {
+        yield return new WaitForSecondsRealtime(restartTime);
+
+        SceneManager.LoadScene(0);
+    }
+
     void Die()
     {
         if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("enemies", "hazards")))
@@ -131,7 +140,7 @@ public class playermovement : MonoBehaviour
             myAnimator.SetTrigger("dying");
             mySpriteRenderer.color = Color.red;
             myRigidBody.velocity = deathKick;
+            StartCoroutine(ResetGame());
         }
-        
     }
 }
