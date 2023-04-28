@@ -5,6 +5,7 @@ using UnityEngine;
 public class enemymovement : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 1f;
+    
     Rigidbody2D myRigidbody;
     BoxCollider2D myTurnCollider;
 
