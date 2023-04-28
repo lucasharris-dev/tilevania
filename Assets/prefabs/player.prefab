@@ -99,7 +99,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 888018993
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: 1552056012, guid: 94b6bbebe57600f439f64ffcc4938365, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -195,6 +195,8 @@ MonoBehaviour:
   jumpHeight: 25
   climbSpeed: 3
   deathKick: {x: 20, y: 20}
+  bullet: {fileID: 7376519246813159043, guid: 9c29b700a840cb64f9ebf66ec2bc3e75, type: 3}
+  gun: {fileID: 2083707761244413864}
 --- !u!61 &1510055539
 BoxCollider2D:
   m_ObjectHideFlags: 0
