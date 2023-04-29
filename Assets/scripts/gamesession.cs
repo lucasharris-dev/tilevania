@@ -56,10 +56,10 @@ public class gamesession : MonoBehaviour
     void RemoveLife()
     {
         playerLives--;
+        gameOver = (playerLives == 0);
 
         if (playerLives == 0)
         {
-            gameOver = true;
             livesText.text = playerLives.ToString();
             playerLives = startingPlayerLives;
             score = 0;
