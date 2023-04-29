@@ -24,6 +24,9 @@ public class levelexit : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        StartCoroutine(NextLevel()); // used to delay method execution
+        if (other.tag == "Player")
+        {
+            StartCoroutine(NextLevel()); // used to delay method execution
+        }
     }
 }
