@@ -19,6 +19,7 @@ public class levelexit : MonoBehaviour
             nextSceneIndex = 0; // reset so the game restarts if you finish, in a real game, could make the final scene a game over screen and let the user choose what to do
         }
 
+        FindObjectOfType<scenepersist>().ResetScenePersistence();
         SceneManager.LoadScene(nextSceneIndex);
     }
 

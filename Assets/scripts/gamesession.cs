@@ -14,6 +14,7 @@ public class gamesession : MonoBehaviour
 
     int startingPlayerLives;
     int score = 0;
+    bool gameOver = false;
 
     // Awake is called when the component this script is on is first opened/instantiated, not when scenes load like Start (this is used for persistent data)
        // Awake is also called before Start
@@ -58,6 +59,7 @@ public class gamesession : MonoBehaviour
 
         if (playerLives == 0)
         {
+            gameOver = true;
             livesText.text = playerLives.ToString();
             playerLives = startingPlayerLives;
             score = 0;
@@ -74,7 +76,12 @@ public class gamesession : MonoBehaviour
         yield return new WaitForSecondsRealtime(resetTimeLength);
 
         SceneManager.LoadScene(levelIndex);
-
+        
+        if (gameOver)
+        {
+            FindObjectOfType<scenepersist>().ResetScenePersistence();
+        }
+        
         livesText.text = playerLives.ToString();
         scoreText.text = score.ToString();
     }
